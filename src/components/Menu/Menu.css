@@ -1,0 +1,12 @@
+.main__menu {
+    border-right: 1px solid #ebe7fb;
+    padding: 0 40px 0 0px;
+  }
+  
+  .menu-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: -500px; 
+    margin-left: 400px;
+  }
+

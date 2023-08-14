@@ -1,0 +1,42 @@
+.form {
+    font-weight: bold;
+    margin: -2px;
+  }
+  
+  .form input {
+    width: 163%;
+    padding: 4px;
+    margin: 10px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    padding-left: 30px;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: transparent;
+    outline: none;
+  }
+
+  .form input:focus {
+    border-color: lightgray;
+  }
+  
+  .Icon-inside {
+    position: relative;
+  }
+  
+  .Icon-inside i {
+    position: absolute;
+    font-size: 18px;
+    left: 6px;
+    top: 10px;
+    padding: 10px;
+    color: rgb(104, 103, 103);
+  }
+  
+  /*@media screen and (max-width: 992px) {
+    .form input {
+       width: 100%;
+    }
+  }
+  */
+
