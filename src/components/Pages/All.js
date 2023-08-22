@@ -5,18 +5,20 @@ import {
   faAnglesLeft,
   faChevronDown,
   faCompressAlt,
-  faPlus
+  faPlus,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./All.css";
 
-const All = ({ level, parentKey, childKey, index }) => {
+const All = ({ level, parentKey = '', childKey, index }) => {
 
   const [subItems, setSubItems] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [showInput, setShowInput] = useState(false);
 
   const localStorageKey = `subItemsLevel${level}_${parentKey}_${childKey}_${index}`;
+
 
 
   useEffect(() => {
@@ -26,9 +28,16 @@ const All = ({ level, parentKey, childKey, index }) => {
     }
   }, [localStorageKey]);
 
+  
+  const generateUniqueId = () => {
+    return `${level}_${subItems.length}`;
+  };
+  
+  
+
   const handleAddSubItem = () => {
     if (inputValue.trim() !== '') {
-      const newSubItems = [...subItems, { text: inputValue, subItems: [] }];
+      const newSubItems = [...subItems, { id: generateUniqueId(), text: inputValue, subItems: [] }];
       setSubItems(newSubItems);
       localStorage.setItem(localStorageKey, JSON.stringify(newSubItems));
       setInputValue('');
@@ -36,8 +45,11 @@ const All = ({ level, parentKey, childKey, index }) => {
     }
   };
 
+ 
+  
+
   // Define icon rendering based on the level
-  const renderIcons = () => {
+  const renderIcons = (id) => {
     if (level === 0) {
       return (
         <>
@@ -71,9 +83,16 @@ const All = ({ level, parentKey, childKey, index }) => {
               <FontAwesomeIcon icon={faChevronDown} />
             </i>
           </li>
+          <li style={{ width: "20px", display: "flex", marginTop: "-40px", marginLeft: "70px" }}>
+            <i aria-hidden="true">
+              <FontAwesomeIcon
+                icon={faTrash}
+              />
+            </i>
+          </li>
         </>
       );
-    }else if (level === 2) {
+    } else if (level === 2) {
       return (
         <>
           <li style={{ width: "20px", display: "flex", marginTop: "-9px", marginLeft: "20px" }}>
@@ -86,12 +105,36 @@ const All = ({ level, parentKey, childKey, index }) => {
               <FontAwesomeIcon icon={faChevronDown} />
             </i>
           </li>
+          <li style={{ width: "20px", display: "flex", marginTop: "-40px", marginLeft: "70px" }}>
+            <i aria-hidden="true">
+              <FontAwesomeIcon
+                icon={faTrash}
+              />
+            </i>
+          </li>
         </>
       );
     }
-     else
+    else
       return null;
   };
+
+  
+
+  const logSubItems = (items, prefix = '') => {
+    items.forEach((item, subIndex) => {
+      /*const key = `${prefix}_level${level}_${parentKey}_${childKey}_${subIndex}`;*/
+      const key = `subItemsLevel${level}_${parentKey}_${childKey}_${index}`;
+      console.log(key, item);
+      if (item.subItems && item.subItems.length > 0) {
+        logSubItems(item.subItems, key);
+      }
+    });
+  };
+
+  // Log subItems at the current level
+  logSubItems(subItems);
+
 
 
   return (
@@ -114,16 +157,19 @@ const All = ({ level, parentKey, childKey, index }) => {
           )}
           {subItems.length > 0 && (
             <ul>
-              {subItems.map((subItem, index) => (
-                <li key={index}>
+              {subItems.map((subItem) => (
+                <li key={subItem.id}>
                   <span className={`submitted-item level-${level}`}>
                     {subItem.text}
                     {level < 3 &&
                       <All
+                        key={`${localStorageKey}_${subItem.id}`}
+                        id={subItem.id}
                         level={level + 1}
-                        parentKey={parentKey + '_' + index}
-                        childKey={index}
-                        index={index}
+                        parentKey={`${parentKey}_${subItem.id}`}
+                        childKey={subItem.id}
+                        index={subItem.id}
+
                       />
                     }
                   </span>
@@ -144,7 +190,7 @@ export default All;
 
 
 
-
+/* parentKey={parentKey + '_' + index} */
 
 
 
